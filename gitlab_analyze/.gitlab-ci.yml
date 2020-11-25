@@ -1,0 +1,20 @@
+image: sonarsource/sonar-scanner-cli
+variables:
+  SONAR_HOST_URL: "http://192.168.100.190"
+  SONAR_TOKEN: "f015ed7c02e4da7b47503ce96a29cb01ba59fc7d"
+  SONAR_PROJECT: "test2"
+  SONAR_ENCODING: "UTF-8"
+  SONAR_PROJECT_BASE_DIR: "/usr/src"
+stages:
+  - analyze
+sonar_analyze:
+  stage: analyze
+  script:
+    - echo -e "SONAR_HOST_URL:$SONAR_HOST_URL\tSONAR_TOKEN:$SONAR_TOKEN"
+    - echo -e "SONAR_PROJECT:$SONAR_PROJECT\tSONAR_ENCODING:$SONAR_ENCODING\tSONAR_PROJECT_BASE_DIR:$SONAR_PROJECT_BASE_DIR"
+    - echo -e "CI_PROJECT_NAME:$CI_PROJECT_NAME\tCI_PROJECT_ID:$CI_PROJECT_ID"
+    - echo -e "CI_BUILD_REF:$CI_BUILD_REF\tCI_BUILD_REF_NAME:$CI_BUILD_REF_NAME"
+    - sonar-scanner -Dsonar.gitlab.commit_sha=$CI_BUILD_REF -Dsonar.gitlab.ref_name=$CI_BUILD_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.sourceEncoding=${SONAR_ENCODING} -Dsonar.projectKey=${CI_PROJECT_NAME}
+    # -Dsonar.analysis.mode=preview # The preview mode, along with the 'sonar.analysis.mode' parameter, is no more supported.
+  tags:
+    - analyze

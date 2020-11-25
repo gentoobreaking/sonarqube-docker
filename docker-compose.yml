@@ -1,0 +1,35 @@
+version: '3.6'
+
+services:
+  postgresql:
+    image: 'docker.io/bitnami/postgresql:10-debian-10'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ./postgresql_data:/bitnami/postgresql
+  sonarqube:
+    image: docker.io/bitnami/sonarqube:7-debian-10
+    ports:
+      - '80:9000'
+    environment:
+      - POSTGRESQL_HOST=postgresql
+      - POSTGRESQL_ROOT_USER=postgres
+      - POSTGRESQL_CLIENT_CREATE_DATABASE_NAME=fp_sonarqube
+      - POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME=fp_sonarqube
+      - POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD=fp_sonarqube!QAZ2wsx#EDC
+      - SONARQUBE_DATABASE_NAME=fp_sonarqube
+      - SONARQUBE_DATABASE_USER=fp_sonarqube
+      - SONARQUBE_DATABASE_PASSWORD=fp_sonarqube!QAZ2wsx#EDC
+      - SONARQUBE_USERNAME=admin
+      - SONARQUBE_PASSWORD=!QAZ2wsx#EDC
+      - SONARQUBE_PORT_NUMBER=9000
+      - SONARQUBE_ELASTICSEARCH_PORT_NUMBER=9001
+      - SONARQUBE_WEB_CONTEXT=/
+      - SONARQUBE_START_TIMEOUT=300
+      # No defaults.
+#      - SONARQUBE_CE_JAVA_ADD_OPTS
+#      - SONARQUBE_ELASTICSEARCH_JAVA_ADD_OPTS
+#      - SONARQUBE_WEB_JAVA_ADD_OPTS
+#      - SONARQUBE_PROPERTIES=my.sonar.property1=property_value,my.sonar.property2=property_value
+    volumes:
+      - ./sonarqube_data:/bitnami
